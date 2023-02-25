@@ -8,7 +8,8 @@ namespace LanchesMac.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            TempData["Nome"] = "Robson";
+            return View();  
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
