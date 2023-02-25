@@ -1,4 +1,6 @@
 ﻿using LanchesMac.Context;
+using LanchesMac.Repositories;
+using LanchesMac.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LanchesMac;
@@ -16,6 +18,13 @@ public class Startup
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+        // REGISTRAR SERVIÇOS DOS REPOSITÓRIOS
+        // Toda vez que eu solicitar uma instância referenciando a Interface "ILancheRepository"
+        // O contêner nativo da DI vai criar uma instância da Classe "LancheRepository" e vai injetar
+        // no Construtor onde eu estiver solicitando a Instância do Repositório
+        services.AddTransient<ILancheRepository, LancheRepository>();
+        services.AddTransient<ICategoriaRepository, CategoriaRepository>();
 
         services.AddControllersWithViews();
     }

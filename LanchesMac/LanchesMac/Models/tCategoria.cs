@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LanchesMac.Models
 {
     [Table("tCategoria")]
-    public class Categoria
+    public class tCategoria
     {
         [Key]
         public int CategoriaId { get; set; }
@@ -20,6 +20,6 @@ namespace LanchesMac.Models
         public string Descricao { get; set; }
 
         //RELACIONAMENTO
-        public List<Lanche> Lanches { get; set; }
+        public List<tLanche> Lanches { get; set; }
     }
 }
