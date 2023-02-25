@@ -10,6 +10,7 @@ namespace LanchesMac.Context
         }
         public DbSet<tCategoria> Categorias { get; set; }
         public DbSet<tLanche> Lanches { get; set; }
+        public DbSet<tCarinhoCompraItem> CarrinhoCompraItens { get; set; }
 
     }
 }
