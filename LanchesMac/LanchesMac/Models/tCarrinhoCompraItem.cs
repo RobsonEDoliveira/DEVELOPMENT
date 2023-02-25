@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LanchesMac.Models
 {
     [Table("tCarrinhoCompraItens")]
-    public class tCarinhoCompraItem
+    public class tCarrinhoCompraItem
     {
         // Tenho que definir no Contexto
         [Key]
