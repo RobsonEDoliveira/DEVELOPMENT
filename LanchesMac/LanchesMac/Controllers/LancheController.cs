@@ -1,4 +1,5 @@
-﻿using LanchesMac.Repositories.Interfaces;
+﻿using LanchesMac.Models;
+using LanchesMac.Repositories.Interfaces;
 using LanchesMac.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,28 +16,42 @@ namespace LanchesMac.Controllers
             _lancheRepository = lancheRepository;
         }
 
-        public IActionResult List()
-        {
-            var lanchesListViewModel = new LancheListViewModel();
+        public IActionResult List(string categoria)
+{
+            IEnumerable<tLanche> lanches;
+            string categoriaAtual = string.Empty;
 
-            lanchesListViewModel.Lanches = _lancheRepository.Lanches.ToList();
-            lanchesListViewModel.CategoriaAtual = "Categoria Atual";
+            // SE FOR VAZIO OU NULA NÃO PASSOU NENHUMA CATEGORIA
+            if (string.IsNullOrEmpty(categoria))
+            {
+                lanches = _lancheRepository.Lanches.OrderBy(l => l.LancheId);
+                categoriaAtual = "Todos os lanches";
+            }
+            else
+            {
+                // "StringComparison.OrdinalIgnoreCase" desconsidera caixa alta ou baixa
+                if (string.Equals("Normal", categoria, StringComparison.OrdinalIgnoreCase))
+                {
+                    lanches = _lancheRepository.Lanches
+                        .Where(l => l.Categoria.CategoriaNome.Equals("Normal"))
+                        .OrderBy(l => l.Nome);
+                }
+                else
+                {
+                    lanches = _lancheRepository.Lanches
+                       .Where(l => l.Categoria.CategoriaNome.Equals("Natural"))
+                       .OrderBy(l => l.Nome);
+                }
+                categoriaAtual = categoria;
+            }
+
+            var lanchesListViewModel = new LancheListViewModel
+            {
+                Lanches = lanches,
+                CategoriaAtual = categoriaAtual
+            };
 
             return View(lanchesListViewModel);
-
-
-          /*  // ViewData e ViewBag tempo de vida, Request.
-            ViewData["Titulo"] = "Todos os Lanches";
-            ViewData["Data"] = DateTime.Now;
-
-            var listarLanches = _lancheRepository.Lanches.ToList();
-            var totalLanches = listarLanches.Count();
-
-            ViewBag.Total = "Total de lanches";
-            ViewBag.TotalLanches = totalLanches;
-
-            return View(listarLanches);
-          */
         }
     }
 }
