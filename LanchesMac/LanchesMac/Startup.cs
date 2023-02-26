@@ -1,4 +1,5 @@
 ﻿using LanchesMac.Context;
+using LanchesMac.Models;
 using LanchesMac.Repositories;
 using LanchesMac.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ public class Startup
         // no Construtor onde eu estiver solicitando a Instância do Repositório
         services.AddTransient<ILancheRepository, LancheRepository>();
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+        services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
 
         // SERVIÇO DO HTTP CONTEXT
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

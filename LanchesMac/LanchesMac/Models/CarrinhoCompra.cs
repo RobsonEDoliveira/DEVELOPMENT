@@ -1,15 +1,13 @@
 ﻿using LanchesMac.Context;
-using LanchesMac.Migrations;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace LanchesMac.Models
 {
-    public class tCarrinhoCompra
+    public class CarrinhoCompra
     {
         private readonly AppDbContext _context;
 
-        public tCarrinhoCompra(AppDbContext context)
+        public CarrinhoCompra(AppDbContext context)
         {
             _context = context;
         }
@@ -17,7 +15,7 @@ namespace LanchesMac.Models
         public string CarrinhoCompraId { get; set; }
         public List<tCarrinhoCompraItem> CarrinhoCompraItens { get; set; }
 
-        public static tCarrinhoCompra GetCarrinho(IServiceProvider services)
+        public static CarrinhoCompra GetCarrinho(IServiceProvider services)
         {
             // DEFINE UMA SESSÃO
             ISession session =
@@ -33,7 +31,7 @@ namespace LanchesMac.Models
             session.SetString("CarrinhoId", carrinhoId);
 
             // RETORNA O CARRINHO COM O CONTEXTO E O ID ATRIBUIDO OU OBTIDO
-            return new tCarrinhoCompra(context)
+            return new CarrinhoCompra(context)
             {
                 CarrinhoCompraId = carrinhoId
             };
