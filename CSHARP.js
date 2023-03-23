@@ -224,3 +224,23 @@ ________________________________________________________________________________
 string UrlSemWWW = url.Replace("www.", "");
 string sUrl = UrlSemWWW.Substring(0, UrlSemWWW.IndexOf('.')).Replace("https://", "").Replace("http://", "");
 ______________________________________________________________________________________________________________
+# LIBERAR CERTIFICADO (NÃO RECOMENDADO EM PRODUÇÃO) APENAS SE NA MÁQUINA OCORRER ERRO DE CERTIFICADO
+
+  public static class CockpitService
+  private static readonly ICockpitService _cockpitService = RestService.For<ICockpitService>("https://localhost:7109");
+
+        static CockpitService()
+        {
+            IgnoreBadCertificates();
+        }
+
+        public static void IgnoreBadCertificates()
+        {
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
+        }
+
+        private static bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
+        }
+______________________________________________________________________________________________________________

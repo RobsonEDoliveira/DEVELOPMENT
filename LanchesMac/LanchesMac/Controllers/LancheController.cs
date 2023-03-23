@@ -17,7 +17,7 @@ namespace LanchesMac.Controllers
         }
 
         public IActionResult List(string categoria)
-{
+        {
             IEnumerable<tLanche> lanches;
             string categoriaAtual = string.Empty;
 
@@ -29,20 +29,26 @@ namespace LanchesMac.Controllers
             }
             else
             {
-                // "StringComparison.OrdinalIgnoreCase" desconsidera caixa alta ou baixa
-                if (string.Equals("Normal", categoria, StringComparison.OrdinalIgnoreCase))
-                {
-                    lanches = _lancheRepository.Lanches
-                        .Where(l => l.Categoria.CategoriaNome.Equals("Normal"))
-                        .OrderBy(l => l.Nome);
-                }
-                else
-                {
-                    lanches = _lancheRepository.Lanches
-                       .Where(l => l.Categoria.CategoriaNome.Equals("Natural"))
-                       .OrderBy(l => l.Nome);
-                }
+                lanches = _lancheRepository.Lanches
+                         .Where(l => l.Categoria.CategoriaNome.Equals(categoria))
+                         .OrderBy(c => c.Nome);
+
                 categoriaAtual = categoria;
+
+                // "StringComparison.OrdinalIgnoreCase" desconsidera caixa alta ou baixa
+                //if (string.Equals("Normal", categoria, StringComparison.OrdinalIgnoreCase))
+                //{
+                //    lanches = _lancheRepository.Lanches
+                //        .Where(l => l.Categoria.CategoriaNome.Equals("Normal"))
+                //        .OrderBy(l => l.Nome);
+                //}
+                //else
+                //{
+                //    lanches = _lancheRepository.Lanches
+                //       .Where(l => l.Categoria.CategoriaNome.Equals("Natural"))
+                //       .OrderBy(l => l.Nome);
+                //}
+                //categoriaAtual = categoria;
             }
 
             var lanchesListViewModel = new LancheListViewModel
@@ -52,6 +58,40 @@ namespace LanchesMac.Controllers
             };
 
             return View(lanchesListViewModel);
+        }
+
+        public IActionResult Details(int lancheId)
+        {
+            var lanche = _lancheRepository.Lanches.FirstOrDefault(l => l.LancheId == lancheId);  
+            return View(lanche);
+        }
+
+        public ViewResult Search(string searchString)
+        {
+            IEnumerable<tLanche> lanches;
+            string categoriaAtual = string.Empty;
+
+            if (string.IsNullOrEmpty(searchString))
+            {
+                lanches = _lancheRepository.Lanches.OrderBy(p => p.LancheId);
+                categoriaAtual = "Todos os Lanches";
+            }
+            else
+            {
+                lanches = _lancheRepository.Lanches
+                          .Where(p => p.Nome.ToLower().Contains(searchString.ToLower()));
+
+                if (lanches.Any())
+                    categoriaAtual = "Lanches";
+                else
+                    categoriaAtual = "Nenhum lanche foi encontrado";
+            }
+
+            return View("~/Views/Lanche/List.cshtml", new LancheListViewModel
+            {
+                Lanches = lanches,
+                CategoriaAtual = categoriaAtual
+            });
         }
     }
 }

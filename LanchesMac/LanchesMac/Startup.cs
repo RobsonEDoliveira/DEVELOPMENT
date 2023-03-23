@@ -26,6 +26,8 @@ public class Startup
         // no Construtor onde eu estiver solicitando a Instância do Repositório
         services.AddTransient<ILancheRepository, LancheRepository>();
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+        services.AddTransient<IPedidoRepository, PedidoRepository>();
+
         services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
 
         // SERVIÇO DO HTTP CONTEXT

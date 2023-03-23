@@ -52,6 +52,7 @@ namespace LanchesMac.Models
                     Lanche = lanche,
                     Quantidade = 1
                 };
+                _context.CarrinhoCompraItens.Add(carrinhoCompraItem);
             }
             else
             {
