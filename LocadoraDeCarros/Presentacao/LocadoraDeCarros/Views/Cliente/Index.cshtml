@@ -1,0 +1,68 @@
+﻿@model IEnumerable<LocadoraDeCarros.Models.ClienteViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<partial name="_mensagemPartial" />
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table" id="tabelaClientes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarteiraDeMotorista)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+</table>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        $('#tabelaClientes').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese.json"
+            },
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "pageLength": 10,
+            "ajax": {
+                "url": "/Cliente/CarregarDados",
+                "type": "POST",
+                "datatype": "json"
+            },
+            columnDefs: [{ "defaultContent": "-", "targets": "_all" }],
+            "columns": [
+                { "data": "id", "name": "id", "autowidth": true },
+                { "data": "nome", "nome": "id", "autowidth": true },
+                { "data": "endereco", "name": "endereco", "autowidth": true },
+                { "data": "email", "name": "email", "autowidth": true },
+                { "data": "carteiraDeMotorista", "name": "carteiraDeMotorista", "autowidth": true },
+                {
+                    "render": function (data, type, full, meta) {
+                        return '<a href="/Cliente/Edit/' + full.id + '" class="btn btn-default">Editar</a> <a href="/Cliente/Details/' + full.id + '" class="btn btn-default">Detalhes</a> <a href="/Cliente/Delete/' + full.id + '" class="btn btn-danger">Excluir</a>';
+                    }
+                },
+            ],
+        });
+    });
+    </script>
+}
