@@ -1,3 +1,36 @@
+
+
+https://www.tecmundo.com.br/software/237426-google-chrome-veja-lista-atalhos-atualizada-windows.htm
+
+REMOVER ESPAÇO
+var urlSplit = _user.Split('/');
+string usurario = urlSplit[0].ToString().Trim();
+string comboTexto = Regex.Replace(urlSplit[1], @"\s", "").ToUpper();
+
+NOVA ABA
+sendKeys(Keys.CONTROL +"t");
+
+// open in default browser
+Process.Start("http://www.stackoverflow.net");
+
+// open in Internet Explorer
+Process.Start("iexplore", @"http://www.stackoverflow.net/");
+
+// open in Firefox
+Process.Start("firefox", @"http://www.stackoverflow.net/");
+
+// open in Google Chrome
+Process.Start("chrome", @"http://www.stackoverflow.net/");
+
+Process.Start(@"%AppData%\..\Local\Google\Chrome\Application\chrome.exe", "http:\\www.YourUrl.com");
+
+
+
+
+****************************************************************
+*                              C#                              *
+****************************************************************
+
 # TESTE COM LOG NO DESKTOP
 
 string userPathx = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\";
@@ -91,8 +124,72 @@ ________________________________________________________________________________
                 }
             }
 ______________________________________________________________________________________________________________
+# PARA NÃO EXIBIR A MENSAGEM
+Aviso de Segurança
+Não é possível verificar quem criou este arquivo. Tem certeza de que deseja executar o arquivo?
+
+            ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe");
+            startInfo.UseShellExecute = false;
+            startInfo.FileName = _url;
+            Process.Start(startInfo);
 ______________________________________________________________________________________________________________
+# Verifico se vai aparecer Popup de tempo de Licença
+        private void VerificarExisteTelaError()
+        {
+            string sNomeJanelaError = "SRC - Erro!!!";
+            AutoItX.WinWait(sNomeJanelaError, "", 20);
+            AutoItX.WinActivate(sNomeJanelaError, "");
+
+            string sJanelaDeEspera = "";
+            int cont = 0;
+
+            while (sJanelaDeEspera == "" && cont < 3)
+            {
+                if (AutoItX.WinExists(sNomeJanelaError) == 1)
+                {
+                    sJanelaDeEspera = sNomeJanelaError;
+                    
+                    // Clico no Botão do Popup de error de Licença
+                    AutoItX.ControlClick(sNomeJanelaError, "", "[CLASS:TsuiButton]");
+                }
+                cont++;
+            }
+        }
+===============================
+             // Nome da Janela [Login]
+            string sNomeJanela = "Login";
+            string sSenhaTratada = TratarSenha(_pwd);
+
+            AutoItX.WinWait(sNomeJanela, "", 20);
+            AutoItX.WinActivate(sNomeJanela, "");
+
+            // Espero a tela [Login] aparecer
+            string sJanelaDeEspera = "";
+            DateTime tempoEspera = DateTime.Now;
+            while (sJanelaDeEspera == "")
+            {
+                if (AutoItX.WinExists(sNomeJanela) == 1)
+                {
+                    sJanelaDeEspera = sNomeJanela;
+
+                    // Insiro Usuário
+                    Thread.Sleep(500);
+                    AutoItX.Send(_user + "{TAB}");
+
+                    // Insiro Senha
+                    Thread.Sleep(500);
+                    AutoItX.Send(sSenhaTratada + "{TAB}{Enter}");
+
+                    break;
+                }
+
+                if ((DateTime.Now - tempoEspera).TotalSeconds > 50)
+                    break;
+
+                Thread.Sleep(500);
+            }
 ______________________________________________________________________________________________________________
+
 # PEGAR CAMINHO DA PASTA DO USUÁRIO DE REDE
 string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 string ramal = "";
@@ -137,112 +234,7 @@ ________________________________________________________________________________
 
 AUTOITX
 
-AutoItX.MouseClick("LEFT", 80, 16, 2, -1);
 
-// Wow, this is C#!
-AutoItX.Run("notepad.exe", "", AutoItX.SW_SHOW);
-AutoItX.WinWaitActive("Untitled");
-AutoItX.Send("I'm in notepad{Enter}{Enter}");
-AutoItX.Send("From AutoItX in C{#}{Enter}{Enter}");
-AutoItX.Send("From C{#} in AutoIt through .NET Framework{Enter}");
-Thread.Sleep(5000);
-IntPtr winHandle = AutoItX.WinGetHandle("Untitled");
-AutoItX.WinKill(winHandle);
-
-Send("{ALT down}{F4 down}{F4 up}{ALT up}")
-Send("{AltDown}{Enter}{AltUp}")
-
-^ = ctrl
-! = alt
-AutoItX.Send("{ALT}{ASC 117}");  ALT + U
-AutoItX.Send("^c", 0);
-ctext = AutoItX.ClipGet().Trim();
-
--- testar 
-SendWait("^c");
-Send("{CTRL}C");
-AutoItX.Run("notepad.exe", "", AutoItX.SW_SHOW);
-AutoItX.WinWaitActive("Untitled");
--- combo box
-Send("{TAB 3}")  ; Sends a Tab button 3 times
-Sleep(500)       ; Because send goes throuhg within milliseconds, add a sleep so it doesnt act as fast.
-Send("{DOWN 5}") ; Sends a Down Arrow 5 times
-Send("{ENTER}")
-
-
-sNomeJanela = "Digite o ramal e a senha";
-AutoItX.WinWait(sNomeJanela, "", 20);
-AutoItX.WinActivate(sNomeJanela, "");
-
-Thread.Sleep(1500);
-AutoItX.Send(sSenhaTratada3CX + "{ENTER}");
-AutoItX.Send("^{ENTER}"); 
-
-
--- PARA COPIAR DE UM COMPONENTE, PRECISO SETAR O NOME DA JANELA, E COLOCAR A CLASSE E INSTANCIA REFERENTE
-string TESTE = AutoItX.ControlGetText("Integrador", "", "[CLASS:WindowsForms10.STATIC.app.0.13965fa_r7_ad1; INSTANCE:2]");
-
-COPIAR  (Ramal é nome da janela)
-string copiarTexto = AutoItX.ControlGetText("Integrador", "", "[CLASS:WindowsForms10.STATIC.app.0.13965fa_r7_ad1; INSTANCE:2]").Replace("Código: ", "");
-
-COLAR
-AutoItX.ControlSend("Ramal:", "", "[CLASSNN:WindowsForms10.EDIT.app.0.378734a1]", copiarTexto);
-
-CLICAR
-AutoItX.ControlClick("Ramal:", "", "[Name:btLogin]");
-AutoItX.ControlClick(sNomeJanela, "", "[CLASS:TBitBtn]");
-AutoItX.ControlClick(sJanelaLogin, "", "[CLASS:Button; INSTANCE:1]");
-
-ALT + A
-AutoItX.Send("{ALT}{ASC 97}");
-https://documentacao.senior.com.br/tecnologia/6.2.35/view/tabelaascii.htm
-
-COPIAR
-AutoItX.Send("^c", 0);
-ctext = AutoItX.ClipGet().Trim();
-
-// Clica no botão avançar
-Thread.Sleep(1500);
-AutoItX.Send("{ALT}{ASC 97}");
-
-CTRL + ENTER
-AutoItX.Send(sSenhaTratada3CX + "{ENTER}");
-AutoItX.Send("^{ENTER}"); 
-
-
-https://www.tecmundo.com.br/software/237426-google-chrome-veja-lista-atalhos-atualizada-windows.htm
-
-REMOVER ESPAÇO
-var urlSplit = _user.Split('/');
-string usurario = urlSplit[0].ToString().Trim();
-string comboTexto = Regex.Replace(urlSplit[1], @"\s", "").ToUpper();
-
-NOVA ABA
-sendKeys(Keys.CONTROL +"t");
-
-// open in default browser
-Process.Start("http://www.stackoverflow.net");
-
-// open in Internet Explorer
-Process.Start("iexplore", @"http://www.stackoverflow.net/");
-
-// open in Firefox
-Process.Start("firefox", @"http://www.stackoverflow.net/");
-
-// open in Google Chrome
-Process.Start("chrome", @"http://www.stackoverflow.net/");
-
-Process.Start(@"%AppData%\..\Local\Google\Chrome\Application\chrome.exe", "http:\\www.YourUrl.com");
-
-# COPIAR URL DO NAVEGADOR
-
-AutoItX.ClipPut(""); // Esvazia a variável do Autoit
-AutoItX.Sleep(1000);
-AutoItX.Send("!d"); //ALT+D para selecionar O ENDEREÇO DA url
-AutoItX.Sleep(1000);
-AutoItX.Send("^c"); //CTRL+C - copia o texto selecionado
-AutoItX.Sleep(1000);
-sUrl = AutoItX.ClipGet(); //copy clipboard to vari
 ______________________________________________________________________________________________________________
 # LER DENTRO DE ARQUIVO
 
@@ -424,7 +416,7 @@ ________________________________________________________________________________
 
 
 
-  var sNomeJanela = "PontoBR Sistemas";
+  var sNomeJanela = "Ponto";
             AutoItX.WinWait(sNomeJanela, "", 20);
             AutoItX.WinActivate(sNomeJanela, "");
 
@@ -453,22 +445,30 @@ AutoItX.WinWaitActive(pageTitle, "", 30);
 
 Na linha adicionada ao código acima, a função WinWaitActive() aguarda a janela especificada ser ativada por até 30 segundos antes de continuar com a execução do código. Isso permite que o código aguarde a nova página ser aberta sem ficar em um loop infinito, aumentando assim a robustez da solução.
 ______________________________________________________________________________________________________________
-# EVENTOS NO FORM
+# 3 - PEGAR RAMAL DO 3CX NO ARQUIVO INI
+            string ramal = "";
+            string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string[] linhas = System.IO.File.ReadAllLines(userPath + @"\AppData\local\3CX VoIP Phone\3CXVoipPhone.ini");
 
-# Clica no ComboBox
-AutoItX.ControlClick("", "", "[CLASS:TsuiDBLookupComboBox; INSTANCE:1]");
+            for (int i = 0; i < linhas.Length; i++)
+            {
+                string[] sDados = linhas[i].Split(',');
 
-# Copiar algum texto no form
-string copiarTexto = AutoItX.ControlGetText("Integrador", "", "[CLASS:WindowsForms10.STATIC.app.0.13965fa_r7_ad1; INSTANCE:2]").Replace("Código: ", "");
+                if (sDados.Length > 0)
+                {
+                    string sColunaName = sDados[0];
 
-sNomeJanela = "Ramal:";
-AutoItX.WinWait(sNomeJanela, "", 20);
-AutoItX.WinActivate(sNomeJanela, "");
-AutoItX.ControlSend("Ramal:", "", "[CLASSNN:WindowsForms10.EDIT.app.0.378734a1]", copiarTexto);
+                    if (sColunaName.Length > 6 && sColunaName.Contains("Name="))
+                    {
+                        ramal = sColunaName.Replace("Name=", "");
+                        break;
+                    }
+                }
+            }         
 
-# Clica no botão
-AutoItX.ControlClick("Ramal:", "", "[Name:btLogin]");
 ______________________________________________________________________________________________________________
+
+
 
 
 
